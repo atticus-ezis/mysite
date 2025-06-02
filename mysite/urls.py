@@ -16,7 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from .views import index, current_datetime, hours_ahead, sum, date_check
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('hello/', index, name='index'),
+    path('time/', current_datetime, name='current_time'),
+    path('time/plus/<int:offset>/', hours_ahead, name = 'hours_ahead'),
+    path('math/<int:number_1>/<int:number_2>/', sum, name = 'sum'),
+    path('valid-date/<int:year>/<int:month>/<int:day>', date_check, name = "date_check"),
 ]
