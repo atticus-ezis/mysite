@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from .views import index, current_datetime, hours_ahead, sum, date_check
+from books.views import book_display, book_details, author_profile, display_classifications, classification_profile
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +26,9 @@ urlpatterns = [
     path('time/plus/<int:offset>/', hours_ahead, name = 'hours_ahead'),
     path('math/<int:number_1>/<int:number_2>/', sum, name = 'sum'),
     path('valid-date/<int:year>/<int:month>/<int:day>', date_check, name = "date_check"),
+    path('books/', book_display, name = "book_display"),
+    path('books/<int:pk>/', book_details, name = "book_details"),
+    path('author/<int:pk>/', author_profile, name = "author_profile"),
+    path('classifications/', display_classifications, name="display_classifications"),
+    path('classification-profile/<int:pk>/', classification_profile, name = "classification_profile"),
 ]

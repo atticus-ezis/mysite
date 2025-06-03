@@ -1,0 +1,8 @@
+<h1>This is {{author.first_name}} {{author.last_name}}'s profile</h1>
+<h3>All books by this author</h3>
+<ul>
+  {% for book in books %}
+  <li><a href={% url 'book_details' book.pk %}>{{book.title}}</a></li>
+  {% endfor %}
+</ul>
+<a href={% url 'book_display' %}>Back to Home</a>

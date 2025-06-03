@@ -1,0 +1,9 @@
+<h1>Classifications</h1>
+
+<ul>
+    {% for classification in classifications %}
+    <li><a href={% url 'classification_profile' classification.pk %}>{{classification.name}}</a></li>
+
+{% endfor %}
+
+</ul>

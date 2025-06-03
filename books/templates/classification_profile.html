@@ -1,0 +1,8 @@
+<h1>These are books with Classification: {{classification.name}}</h1>
+<ul>
+  {% for book in books %}
+  <li><a href={% url 'book_details' book.pk %}>{{book.title}}</a></li>
+  {% endfor %}
+</ul>
+
+<a href={% url 'book_display' %}>Back to Home</a>
