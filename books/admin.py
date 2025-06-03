@@ -1,28 +1,35 @@
 from django.contrib import admin
 
-# Register your models here.
 from books.models import Author, Book, Publisher, Classification
 
-# changes order
 class AuthorAdmin(admin.ModelAdmin):
     fields = ["email", "first_name", "last_name"]
+    search_fields = ["first_name", "last_name"] # added search field 
 
 class BookAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {"fields": ["title", "authors", "publisher", "classification"]}),
+        (None, {"fields": ["classification", "title", "authors", "publisher"]}), # re-ordered fields in change form
         ("Date information", {
             "fields": ["publication_date"],
             "classes": ["collapse"],
         }),
 
     ]
-    list_display = ["title", "publisher"]
+    list_display = ["title", "publisher", "was_published_recently"]
+    search_fields = ['title']
+    filter_horizontal = ['authors']
 
-class BookInline(admin.StackedInline):
+class BookInline(admin.TabularInline):
     model = Book
     extra = 3
 
+class PublisherAdmin(admin.ModelAdmin):
+    inlines = [BookInline]
+    fields = ["website", "name", "address", "city", "country"] # re-order fields in change form
+    search_fields = ["name", "city", "country", "website"] # added search field 
+    list_display = ["name", "city", "country", "website"] # add display list
+
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(Book, BookAdmin)
-admin.site.register(Publisher)
+admin.site.register(Publisher, PublisherAdmin)
 admin.site.register(Classification)
