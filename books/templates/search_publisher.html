@@ -1,0 +1,8 @@
+<h1>Search Publisher</h1>
+<form action="" method="get">{{ form }}<input type="submit" value="Search" /></form>
+<h1>results:</h1>
+{% for publisher in publishers %}
+<ul>
+  <li>{{publisher.name}}</li>
+</ul>
+{% endfor %}

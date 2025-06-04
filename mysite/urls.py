@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from .views import index, current_datetime, hours_ahead, sum, date_check
 from books.views import book_display, book_details, author_profile, display_classifications, classification_profile
 
@@ -30,5 +30,6 @@ urlpatterns = [
     path('books/<int:pk>/', book_details, name = "book_details"),
     path('author/<int:pk>/', author_profile, name = "author_profile"),
     path('classifications/', display_classifications, name="display_classifications"),
-    path('classification-profile/<int:pk>/', classification_profile, name = "classification_profile"),
+    path('classification-profile/<int:pk>/', classification_profile, name = "classification_profile"),  
+    path('books/', include('books.urls')),
 ]

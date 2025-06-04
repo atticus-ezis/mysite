@@ -1,0 +1,12 @@
+<h1>Search Author</h1>
+<form action="" method="get">
+  {{ form }}
+  <input type="submit" value="search" />
+</form>
+<h1>Results</h1>
+{% for author in authors %}
+<ul>
+  <li>{{author.first_name}}{{author.last_name}}</li>
+</ul>
+
+{% endfor %}
