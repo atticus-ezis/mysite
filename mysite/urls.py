@@ -21,7 +21,7 @@ from books.views import book_display, book_details, author_profile, display_clas
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('hello/', index, name='index'),
+    path('', index, name='index'),
     path('time/', current_datetime, name='current_time'),
     path('time/plus/<int:offset>/', hours_ahead, name = 'hours_ahead'),
     path('math/<int:number_1>/<int:number_2>/', sum, name = 'sum'),

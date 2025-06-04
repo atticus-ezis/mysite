@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import search, create_author, update_author, delete_author, contact, search_publisher, search_author, create_book, update_book, delete_book, create_publisher, update_publisher, delete_publisher
+from .views import search, create_author, update_author, delete_author, contact, search_publisher, search_author, create_book, update_book, delete_book, create_publisher, update_publisher, delete_publisher, register_user, login_user, logout_view
 
 urlpatterns = [
     # search contact create
@@ -16,4 +16,7 @@ urlpatterns = [
     path('create_publisher/', create_publisher, name="create_publisher"),
     path('update_publisher/<int:pk>/', update_publisher, name="update_publisher"),
     path('delete_publisher/<int:pk>/', delete_publisher, name="delete_publisher"),
+    path('user/register/', register_user, name="register_user"),
+    path('user/login/', login_user, name="login_user"),
+    path('user/logout/', logout_view, name="logout"),
 ]

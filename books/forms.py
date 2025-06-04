@@ -1,6 +1,19 @@
 from django import forms
 from django.forms import ModelForm
 from .models import Author, Book, Publisher
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+
+class UserRegister(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email',]
+
+class UserLogin(AuthenticationForm):
+    class Meta:
+        model = User
+        fields = ['username', ]
+
 
 class ContactForm(forms.Form):
     subject = forms.CharField(max_length=100)

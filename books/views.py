@@ -1,30 +1,36 @@
 from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 
 
 from .models import Author, Publisher, Book, Classification
 
 # Create your views here.
 
+@login_required
 def book_display(request):
     books = Book.objects.all()
     classifications = Classification.objects.all()
     publishers = Publisher.objects.all()
     return render(request, 'display_books.html', {"books":books, "classifications":classifications, "publishers":publishers})
-    
+
+@login_required
 def book_details(request, pk):
     book = get_object_or_404(Book, pk=pk)
     return render(request,'book_detail.html', {"book":book})
 
+@login_required
 def author_profile(request, pk):
     author = get_object_or_404(Author, pk=pk)
     books = author.books.all()
     return render(request, "author_profile.html", {"author":author, "books":books})
 
+@login_required
 def display_classifications(request):
     classifications = Classification.objects.all()
     return render(request, 'display_classifications.html', {"classifications":classifications})
 
+@login_required
 def classification_profile(request, pk):
     classification = get_object_or_404(Classification, pk=pk)
     books = classification.books.all()
@@ -77,6 +83,7 @@ def create_author(request):
     context = {"form": form}
     return render(request, "create_author.html", context)
 
+@user_passes_test(lambda u: u.is_staff, login_url='/books/user/login')
 def update_author(request, pk=None):
     author = get_object_or_404(Author, pk=pk)
     form = AuthorForm(instance=author)
@@ -131,6 +138,8 @@ def search_author(request):
 
 from .forms import CreateBook
 
+
+@user_passes_test(lambda u: u.is_staff, login_url='/books/user/login')
 def create_book(request):
     object = 'Book'
     if request.method == 'POST':
@@ -165,6 +174,7 @@ def delete_book(request, pk):
 # publisher create, update, delete
 from .forms import CreatePublisher
 
+@user_passes_test(lambda u: u.is_staff, login_url='/books/user/login')
 def create_publisher(request):
     object = 'Publisher'
     if request.method == 'POST':
@@ -194,3 +204,36 @@ def delete_publisher(request, pk):
         publisher.delete()
         return redirect('book_display')
     return render(request, 'delete_author.html')
+
+from .forms import UserRegister
+from django.contrib.auth import login
+
+def register_user(request):
+    if request.method=='POST':
+        form = UserRegister(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('book_display')
+    form = UserRegister()
+    return render(request, 'registration.html', {"form":form, "subject":"Signup"})
+
+from .forms import UserLogin
+from django.contrib.auth import authenticate
+
+def login_user(request):
+    if request.method=='POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        login(request, user)
+        return redirect('book_display')
+    form = UserLogin()
+    return render(request, 'registration.html', {"form":form, "subject":"Login"})
+
+from django.contrib.auth import logout
+def logout_view(request):
+    logout(request)
+    return redirect('login_user')
+
+

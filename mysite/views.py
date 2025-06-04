@@ -5,7 +5,7 @@ import datetime
 from django.template.loader import get_template
 
 def index(request):
-    return HttpResponse('Hello world!')
+    return render(request, 'index.html')
 
 def current_datetime(request):
     now = datetime.datetime.now()
