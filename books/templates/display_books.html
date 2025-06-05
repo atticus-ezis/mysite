@@ -1,37 +1,52 @@
 <h1>Hello {{request.user.username}}</h1>
+<a href="{% url 'logout' %}">Logout?</a>
+
 <h1>Book Display</h1>
-<a href={% url "logout" %}>Logout?</a>
-<a href={% url 'create_book'%}>Create Book?</a>
+<a href="{% url 'create_book'%}">Create Book?</a>
 {% for book in books %}
 <ul>
 
-  <li><a href={% url 'book_details' book.pk %}>{{book.title}}</a></li>
-  <li><a href={% url "update_book" book.pk%}>Update Book</a></li>
-  <li><a href={% url "delete_book" book.pk%}>Delete Book</a></li>
+  <li><a href="{% url 'book_details' book.pk %}">{{book.title}}</a></li>
+  <li><a href="{% url "update_book" book.pk%}">Update Book</a></li>
+  <li><a href="{% url "delete_book" book.pk%}">Delete Book</a></li>
 </ul>
 
 {% endfor %}
+
+{% if not books %}  
+<p>No books are available.</p>
+{% endif %}
 
 <h1>All classifications:</h1>
 
 <ul>
   {% for classification in classifications %}
-  <li><a href={% url 'classification_profile' classification.pk%}>{{classification.name}}</a></li>
+  <li><a href="{% url 'classification_profile' classification.pk%}">{{classification.name}}</a></li>
   {% endfor %}
 </ul>
 
 <h1>All Publishers:</h1>
-<a href={% url 'create_publisher'%}>Create Publisher?</a>
+<a href="{% url 'create_publisher'%}">Create Publisher?</a>
 <ul>
   {% for publisher in publishers %}
   <li>{{publisher.name}}</li>
-  <li><a href={% url 'update_publisher' publisher.pk%}>Update</a></li>
-  <li><a href={% url 'delete_publisher' publisher.pk%}>Delete</a></li>
+  <li><a href="{% url 'update_publisher' publisher.pk%}">Update</a></li>
+  <li><a href="{% url 'delete_publisher' publisher.pk%}">Delete</a></li>
+  {% endfor %}
+</ul>
+
+<h1>All Authors:</h1>
+<a href="{% url 'create_author'%}">Create Author?</a>
+<ul>
+  {% for author in authors %}
+  <li><a href="{% url 'author_profile' author.pk %}">{{author.first_name}}, {{author.last_name}}</a></li>
+  <li><a href="{% url 'update_author' author.pk%}">Update</a></li>
+  <li><a href="{% url 'delete_author' author.pk%}">Delete</a></li>
   {% endfor %}
 </ul>
 
 <h1>Search for..</h1>
 <ul>
-  <li><a href={% url 'search_author' %}>Author</a></li>
-  <li><a href={% url 'search_publisher' %}>Publisher</a></li>
+  <li><a href="{% url 'search_author' %}">Author</a></li>
+  <li><a href="{% url 'search_publisher' %}">Publisher</a></li>
 </ul>

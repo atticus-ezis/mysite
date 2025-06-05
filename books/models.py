@@ -30,8 +30,9 @@ class Book(models.Model):
     classification = models.ForeignKey("books.Classification", on_delete=models.CASCADE, related_name="books", null=True, blank=True)
 
     def was_published_recently(self):
-        today = datetime.datetime.now().date()
-        return self.publication_date >= today - datetime.timedelta(days=1)
+        date_today = datetime.datetime.now().date()
+        publication_date = self.publication_date.date()
+        return date_today - datetime.timedelta(days=1) <= publication_date <=date_today
     
     was_published_recently.admin_order_field = 'publication_date'
     was_published_recently.boolean = True

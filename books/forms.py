@@ -9,10 +9,9 @@ class UserRegister(UserCreationForm):
         model = User
         fields = ['username', 'email',]
 
-class UserLogin(AuthenticationForm):
-    class Meta:
-        model = User
-        fields = ['username', ]
+class UserLogin(forms.Form):
+    username = forms.CharField(max_length=100)
+    password = forms.CharField(max_length=100)
 
 
 class ContactForm(forms.Form):
@@ -38,12 +37,12 @@ class SearchForm(forms.Form):
     query = forms.CharField(max_length=100)
 
 
-class CreateBook(ModelForm):
+class CreateBookForm(ModelForm):
     class Meta:
         model = Book
         fields = "__all__"
 
-class CreatePublisher(ModelForm):
+class CreatePublisherForm(ModelForm):
     class Meta:
         model = Publisher
         fields = "__all__"
