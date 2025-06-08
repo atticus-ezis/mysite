@@ -80,7 +80,6 @@ def contact(request):
     return render(request,"contact.html", {"form": form}
 )
 
-
 def create_author(request):
     form = AuthorForm()
     if request.method == "POST":
@@ -135,11 +134,29 @@ class SearchPublisher(View):
         if form.is_valid():
             query = form.cleaned_data['query']
             publishers = Publisher.objects.filter(name__icontains = query)
+
+            # add session history start
+            if 'search_history' not in request.session:
+                request.session['search_history'] = []
+
+            search_history = request.session['search_history']
+            if query not in search_history:
+                search_history.append(query)
+                request.session['search_history'] = search_history
+            # end 
+    
         else:
             form = SearchForm()
             publishers = []
+        context = {"form": form, "publishers":publishers, "history":request.session}
 
-        return render(request, 'search_publisher.html', {"form": form, "publishers":publishers})
+        return render(request, 'search_publisher.html', context)
+    
+def search_history(request):
+    if 'search_history' not in request.session:
+        request.session['search_history'] = []
+    search_history = request.session['search_history']
+    return render(request, 'search_history.html', {"search_history": search_history})
 
 from django.db.models import Q
 
@@ -148,6 +165,7 @@ class SearchAuthor(View):
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
+            
             authors = Author.objects.filter(Q(first_name__icontains=query) | Q(last_name__icontains=query))
         else:
             form = SearchForm()
@@ -181,7 +199,6 @@ class UpdateBook(UpdateView):
     template_name = 'update_book.html'
     success_url = reverse_lazy('book_display')
 
-
 class UpdatePublisher(UpdateView):
     model = Publisher
     form_class = CreatePublisherForm
@@ -198,30 +215,7 @@ class DeletePublisher(DeleteView):
     model = Publisher
     template_name = 'delete_author.html'
     success_url = reverse_lazy('book_display')
-
-
     
-# publisher create, update, delete
-
-
-
-
-@user_passes_test(lambda u: u.is_staff, login_url='/books/user/login')
-def create_publisher(request):
-    object = 'Publisher'
-    if request.method == 'POST':
-        form = CreatePublisher(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('book_display')
-    else:
-        form = CreatePublisher()
-    context = {'form':form, "object":object}
-    return render(request, "create_book.html", context)
-
-
-    
-
 
 from .forms import UserRegister
 from django.contrib.auth import login
@@ -238,16 +232,6 @@ def register_user(request):
 
 from .forms import UserLogin
 from django.contrib.auth import authenticate
-
-# def login_user(request):
-#     if request.method=='POST':
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         user = authenticate(username=username, password=password)
-#         login(request, user)
-#         return redirect('book_display')
-#     form = UserLogin()
-#     return render(request, 'registration.html', {"form":form, "subject":"Login"})
 
 def login_user(request):
     form = UserLogin(request.POST or None)
@@ -270,4 +254,7 @@ def logout_view(request):
     logout(request)
     return redirect('login_user')
 
+# store session data for 
 
+
+    

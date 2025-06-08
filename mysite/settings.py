@@ -50,6 +50,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'books.middleware.MakeUserAuthor',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -126,3 +128,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 LOGIN_URL = 'user/login/'
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+        "LOCATION": "127.0.0.1:11211",
+    }
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
+
+
+
+# Testing
+# from django.core.cache import cache
+# cache.set('my_key', 'hello', timeout=30)
+# cache.get('my_key')  

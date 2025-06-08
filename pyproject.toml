@@ -7,4 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "django>=5.2.1",
     "django-extensions>=4.1",
+    "pymemcache>=4.0.0",
+    "python-memcached>=1.62",
+    "requests>=2.32.3",
 ]

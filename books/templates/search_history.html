@@ -1,0 +1,6 @@
+<h1>Search History</h1>
+<ul>
+  {% for item in search_history %}
+  <li><a href="{% url 'search_publisher' %}?query={{ item|urlencode }}">{{item}}</a></li>
+  {% endfor %}
+</ul>
